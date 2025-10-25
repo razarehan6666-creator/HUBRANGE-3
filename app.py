@@ -1,10 +1,15 @@
 from flask import Flask, render_template, jsonify
 from openpyxl import load_workbook
+import os
 
 app = Flask(__name__)
 
+# Get absolute path to the Excel file
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+EXCEL_FILE = os.path.join(BASE_DIR, "milk_data.xlsx")
+
 def get_month_data(month_name):
-    wb = load_workbook("milk_data.xlsx")
+    wb = load_workbook(EXCEL_FILE)
     sheet = wb.active
     data = {}
 
@@ -36,6 +41,9 @@ def month_data(month_name):
         return jsonify({"error": "No data found for this month"})
 
 if __name__ == "__main__":
-app.run(host="0.0.0.0", debug=True)
+    # Local testing only
+    app.run(host="0.0.0.0", port=5000, debug=True)
+
+
 
 
